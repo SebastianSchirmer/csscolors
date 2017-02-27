@@ -1,0 +1,377 @@
+@import "normalize";
+
+///////////////////
+// VARIABLES
+///////////////////
+
+$color-dark-bg: rgba(255, 255, 255, .9);
+$color-dark-bg-hover: rgba(255, 255, 255, .7);
+
+$color-light-bg: rgba(0, 0, 0, .8);
+$color-light-bg-hover: rgba(0, 0, 0, .6);
+
+$breakpoints: (
+    default:    '',
+    small:      (400px),
+    medium:     (600px),
+    large:      (800px),
+    x-large:    (1000px)
+) !default;
+
+$header-height-small: 2.5rem;
+$header-height-large: 2.5rem;
+
+
+///////////////////
+// MIXINS
+///////////////////
+@mixin min-bp($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $breakpoint) {
+        // Prints a media query based on the value
+        @media (min-width: map-get($breakpoints, $breakpoint)) {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+}
+
+///////////////////
+// RESET, BASE STYLES AND UTILITIES
+///////////////////
+html, body {
+    min-height: 100%;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+html,
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: 'Raleway', sans-serif;
+}
+
+* {
+    &,
+    &:before,
+    &:after {
+        box-sizing: inherit;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    position: fixed;
+    background-color: #ffffff;
+    width: 100%;
+    height: $header-height-small;
+    z-index: 2;
+    box-shadow: 0 1px 5px rgba(0,0,0,.4);
+
+    @include min-bp('medium') {
+        height: $header-height-large;
+    }
+}
+
+.filter-list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: .75rem;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+    & > li {
+        height: 100%;
+        width: 100%;
+        vertical-align: middle;
+    }
+
+    & > li > a {
+        display: block;
+        text-decoration: none;
+        margin: 0;
+        text-align: center;
+        height: 100%;
+        line-height: $header-height-small;
+
+        transition: all .3s ease;
+
+        &.dark {
+            color: $color-dark-bg;
+        }
+
+        &.dark:hover {
+            color: $color-dark-bg-hover;
+        }
+
+        &.light {
+            color: $color-light-bg;
+        }
+
+        &.light:hover {
+            color: $color-light-bg-hover;
+        }
+    }
+
+    & > li > a > span {
+        opacity: 0;
+        display: none;
+
+        @include min-bp('medium') {
+            opacity: 1;
+            line-height: $header-height-large;
+        }
+    }
+}
+
+.page-wrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.color-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    text-align: center;
+    padding: 1rem;
+
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0);
+
+    transition: opacity .3s ease, transform .3s ease;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    &.is-visibility-shown {
+        visibility: visible;
+    }
+
+    &.is-shown {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    &.dark {
+        color: $color-dark-bg;
+    }
+
+    &.light {
+        color: $color-light-bg;
+    }
+}
+
+.color-name,
+.color-hex-code,
+.color-rgb-code {
+    padding: .25rem;
+}
+
+.color-name {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: calc(1rem + 3vw);
+    letter-spacing: 3px;
+}
+
+.color-codes {
+    list-style: none;
+    padding: 0;
+
+    & code {
+        font-size: .875rem;
+        font-family: 'Monaco', 'menlo', monospace;
+    }
+}
+
+.color-hex-code,
+.color-rgb-code {
+    display: inline-block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    //color: rgba(0, 0, 0, .7);
+}
+
+
+.button-wrapper {
+    text-align: center;
+    padding: 0;
+    //padding-top: calc(4.5rem + 8px); // 8px to compensate for box-shadow
+    padding-top: $header-height-small;
+
+    @include min-bp('medium') {
+        padding-top: $header-height-large;
+    }
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    transition: opacity .2s ease;
+
+    &.is-hidden {
+        opacity: 0;
+    }
+
+    &.is-visibility-hidden {
+        visibility: hidden;
+    }
+}
+
+button {
+    border: none;
+    width: 100%;
+    height: 12em;
+    padding: .25rem;
+    font-size: .6rem;
+    cursor: pointer;
+    transition: all .2s ease;
+    outline: none;
+
+    //margin-left: 2%;
+    //margin-bottom: 2%;
+    //border-radius: .5rem;
+
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    transform: scale(1);
+
+    &:hover {
+
+        @include min-bp('small') {
+            box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+    }
+
+    &.dark {
+        color: $color-dark-bg;
+    }
+
+    &.dark:hover {
+        color: $color-dark-bg-hover;
+    }
+
+    &.light {
+        color: $color-light-bg;
+    }
+
+    &.light:hover {
+        color: $color-light-bg-hover;
+    }
+
+    @include min-bp('small') {
+        width: 50%;
+    }
+
+    @include min-bp('medium') {
+        width: 33%;
+    }
+
+    @include min-bp('large') {
+        width: 25%;
+    }
+
+    @include min-bp('x-large') {
+        width: 20%;
+    }
+}
+
+
+
+// FOOTER
+footer {
+    font-size: .825rem;
+}
+
+.copyright {
+    width: 85%;
+    line-height: 2;
+    margin: 6rem auto 3rem auto;
+
+    & a {
+        color: #dd005a;
+        text-decoration: none;
+        border-bottom: 1px dotted #dd005a;
+    }
+
+    & a:hover {
+        border-bottom: 1px solid #dd005a;
+    }
+}
+
+// bg colors for filters
+.bg-all {
+    background-color: black;
+}
+
+.bg-red {
+    background-color: red;
+}
+
+.bg-pink {
+    background-color: pink;
+}
+
+.bg-orange {
+    background-color: orange;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-purple {
+    background-color: purple;
+}
+
+.bg-green {
+    background-color: green;
+}
+
+.bg-blue {
+    background-color: blue;
+}
+
+.bg-brown {
+    background-color: brown;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-gray {
+    background-color: gray;
+}
