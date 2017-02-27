@@ -60,13 +60,11 @@
 
     function addListeners() {
         window.addEventListener('click', clickHandler);
+        window.addEventListener('tap', clickHandler);
     }
 
     function clickHandler(e) {
         var clickedElement = e.target;
-
-        console.log('clicked element:');
-        console.log(clickedElement);
 
         var chosenColor;
         if (clickedElement.firstElementChild) {
