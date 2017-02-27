@@ -94,7 +94,7 @@
         "no-param-reassign": [2, { "props": false }],
         "func-names": 0,
         // require function expressions to have a name
-        "func-names-exclude-iife": 1,
+        "func-names-exclude-iife": 0,
         "no-lonely-if": 0
     }
 }

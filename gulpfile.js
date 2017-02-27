@@ -75,9 +75,14 @@ gulp.task('images', function () {
     return gulp.src('src/images/**')
         .pipe($.if(minify, $.imagemin({
             optimizationLevel: 3,
-            progressive: false,
-            interlaced: false
+            // Lossless conversion to progressive JPGs
+            progressive: true,
+            // Interlace GIFs for progressive rendering
+            interlaced: true
         })))
+        .pipe(size({
+            title: 'images'
+        }))
         .pipe(gulp.dest('dist/images'));
 });
 
@@ -120,7 +125,6 @@ gulp.task('watch', function () {
     gulp.watch('src/images/**/*', ['images', browserSync.reload]);
 });
 
-
 // -----------------------------------------------------------
 // Build and start browser-sync and watch
 // -----------------------------------------------------------
@@ -153,6 +157,19 @@ gulp.task('deploy', function () {
         .pipe(ghPages());
 });
 
+// -----------------------------------------------------------
+// lint js sources using ESLint
+// -----------------------------------------------------------
+gulp.task('eslint', function () {
+    log('Performing eslint');
+    return gulp.src('./src/scripts/**/*.js')
+        .pipe($.eslint({
+            useEslintrc: true,
+            ignore: true
+        }))
+        .pipe($.eslint.format())
+});
+
 ///////////////////////
 // General functions //
 ///////////////////////
@@ -166,5 +183,13 @@ function log(msg) {
         }
     } else {
         $.util.log($.util.colors.yellow(msg));
+    }
+}
+
+function errorHandler(error) {
+    if (minify) {
+        throw error;
+    } else {
+        log(error.toString);
     }
 }
