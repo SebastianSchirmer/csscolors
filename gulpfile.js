@@ -80,7 +80,7 @@ gulp.task('images', function () {
             // Interlace GIFs for progressive rendering
             interlaced: true
         })))
-        .pipe(size({
+        .pipe($.size({
             title: 'images'
         }))
         .pipe(gulp.dest('dist/images'));
