@@ -101,9 +101,8 @@
 
     function hidePanel() {
         console.log('hidePanel() called');
-        window.removeEventListener('touchstart', clickHandler);
+        window.removeEventListener('touchend', clickHandler);
         panelIsOpen = false;
-        // window.removeEventListener('touchstart', clickHandler);
         var colorPanel = document.getElementById('js-color-panel');
         colorPanel.classList.remove('is-shown');
         setTimeout(function () {
@@ -112,7 +111,7 @@
     }
 
     function updateAndShowColorPanel(color) {
-        window.addEventListener('touchstart', clickHandler);
+        window.addEventListener('touchend', clickHandler);
         panelIsOpen = true;
         var colorPanel = document.getElementById('js-color-panel');
 
