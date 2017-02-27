@@ -60,7 +60,6 @@
 
     function addListeners() {
         window.addEventListener('click', clickHandler);
-        window.addEventListener('tap', clickHandler);
     }
 
     function clickHandler(e) {
@@ -101,6 +100,7 @@
 
     function hidePanel() {
         console.log('hidePanel() called');
+        window.removeEventListener('tap', clickHandler);
         panelIsOpen = false;
         // window.removeEventListener('touchstart', clickHandler);
         var colorPanel = document.getElementById('js-color-panel');
@@ -111,6 +111,7 @@
     }
 
     function updateAndShowColorPanel(color) {
+        window.addEventListener('tap', clickHandler);
         panelIsOpen = true;
         // window.addEventListener('touchstart', clickHandler);
         var colorPanel = document.getElementById('js-color-panel');
