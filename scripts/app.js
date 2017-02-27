@@ -63,6 +63,7 @@
     }
 
     function clickHandler(e) {
+        console.log('YEAH, click event received!');
         var clickedElement = e.target;
 
         var chosenColor;
