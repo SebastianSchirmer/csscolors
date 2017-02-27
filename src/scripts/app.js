@@ -79,8 +79,13 @@
             }
         }
 
-        // full screen color panel div clicked
-        if (clickedElement.classList.contains('color-panel')) {
+        // full screen color panel div or any child element clicked
+        if (clickedElement.classList.contains('color-panel')
+            || clickedElement.classList.contains('color-name')
+            || clickedElement.classList.contains('color-codes')
+            || clickedElement.classList.contains('color-hex-code')
+            || clickedElement.classList.contains('color-rgb-code')
+            || clickedElement.tagName.toLowerCase() === 'code') {
             // hide the panel
             hidePanel();
         }
