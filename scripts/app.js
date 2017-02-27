@@ -60,7 +60,7 @@
 
     function addListeners() {
         window.addEventListener('click', clickHandler);
-        window.addEventListener('touchstart', clickHandler);
+        window.addEventListener('tap', clickHandler);
     }
 
     function clickHandler(e) {
