@@ -76,7 +76,7 @@
         // overwrite disallow use of console
         "no-console": [2, { "allow": ["log", "warn", "error"] }],
         // overwrite no use before define
-        "no-use-before-define": [2, { "functions": false }],
+        "no-use-before-define": [0, { "functions": false }],
         // ignore rule require or disallow a space immediately following the // or /* in a comment
         "spaced-comment": 0,
         // ignore rule requires to declare all vars on top of their containing scope
@@ -95,6 +95,6 @@
         "func-names": 0,
         // require function expressions to have a name
         "func-names-exclude-iife": 1,
-        "angular/log": 0
+        "no-lonely-if": 0
     }
 }
