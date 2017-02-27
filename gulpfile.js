@@ -12,6 +12,7 @@ var concat = require('gulp-concat');
 var plumber = require('gulp-plumber');
 var browserSync = require('browser-sync');
 var changed = require('gulp-changed');
+var ghPages = require('gulp-gh-pages');
 
 // PostCSS Plugins
 var postcss = require('gulp-postcss');
@@ -101,6 +102,12 @@ gulp.task('watch', function () {
 // ...
 gulp.task('default', function () {
     gulp.start('styles', 'scripts', 'images', 'html', 'browser-sync', 'watch');
+});
+
+// ...
+gulp.task('deploy', function () {
+    return gulp.src('./dist/**/*')
+        .pipe(ghPages());
 });
 
 ///////////////////////
