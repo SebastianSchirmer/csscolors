@@ -32,7 +32,7 @@ gulp.task('clean', function () {
 // ...
 // -----------------------------------------------------------
 gulp.task('styles', function () {
-    gulp.src('./src/sass/**/*.scss')
+    gulp.src('./src/sass/**/main.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(postCssProcessors))
         .pipe(gulp.dest('dist/styles'))
