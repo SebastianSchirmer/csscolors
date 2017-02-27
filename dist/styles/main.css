@@ -481,6 +481,7 @@ header {
     @media (min-width: 600px) {
       .filter-list > li > a > span {
         opacity: 1;
+        display: block;
         line-height: 2.5rem; } }
 
 .page-wrapper {

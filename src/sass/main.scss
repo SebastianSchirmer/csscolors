@@ -137,6 +137,7 @@ header {
 
         @include min-bp('medium') {
             opacity: 1;
+            display: block;
             line-height: $header-height-large;
         }
     }
