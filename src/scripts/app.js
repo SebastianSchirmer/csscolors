@@ -35,14 +35,12 @@
             // build color buttons
             filteredColorObjects.forEach(function (color) {
                 var button = document.createElement('button');
-                var span = document.createElement('span');
 
                 button.classList.add(color.name);
                 button.classList.add(color.type);
                 button.style.backgroundColor = color.name;
 
-                span.appendChild(document.createTextNode(color.name));
-                button.appendChild(span);
+                button.appendChild(document.createTextNode(color.name));
                 buttonWrapper.appendChild(button);
 
                 setTimeout(function () {
@@ -59,36 +57,37 @@
     function clickHandler(e) {
         var clickedElement = e.target;
 
-        var chosenColor;
-        if (clickedElement.firstElementChild) {
-            chosenColor = clickedElement.firstElementChild.innerHTML;
+        // color button clicked
+        if (clickedElement.tagName.toLowerCase() === 'button') {
+            var chosenColor = clickedElement.innerHTML;
+            if (typeof chosenColor === 'string' && chosenColor !== '') {
+                updateAndShowColorPanel(chosenColor);
+            }
         }
 
-        // color button clicked
-        if (clickedElement.tagName.toLowerCase() === 'button'
-            && typeof chosenColor === 'string'
-            && chosenColor !== '') {
-            updateAndShowColorPanel(chosenColor);
-        } else {
-            // filter link clicked
-            if (clickedElement.classList.contains('js-filter') && chosenColor !== filterValue) {
-                var newFilterValue = chosenColor === 'all' ? '' : chosenColor;
+        // color filter anchor clicked
+        if (clickedElement.tagName.toLowerCase() === 'a' && clickedElement.classList.contains('js-filter')) {
+            var colorCategory = clickedElement.firstElementChild.innerHTML;
+
+            if (colorCategory !== filterValue) {
+                var newFilterValue = colorCategory === 'all' ? '' : colorCategory;
                 // if clicked filter is different from current filter
                 if (newFilterValue !== filterValue) {
                     filterValue = newFilterValue;
                     buildColorGallery(filterValue);
                 }
-            } else {
-                if (clickedElement.classList.contains('color-panel')) {
-                    // full screen panel clicked, hide it
-                    hidePanel();
-                }
             }
+        }
+
+        // full screen color panel div clicked
+        if (clickedElement.classList.contains('color-panel')) {
+            // hide the panel
+            hidePanel();
         }
     }
 
     function updateAndShowColorPanel(color) {
-        // add touchend event listener for mobile safari
+        // add touchend event listener for cater for mobile safari
         window.addEventListener('touchend', clickHandler);
 
         var colorPanel = document.getElementById('js-color-panel');
@@ -96,13 +95,13 @@
         // set bg color
         colorPanel.style.backgroundColor = color;
 
+        // get the color object
         var colorArray = colorObjects.filter(function (obj) {
             return obj.name === color;
         });
-
         var colorObject = colorArray[0];
 
-        // set light or dark font color
+        // set light or dark class to set proper font color
         colorPanel.classList.remove('dark');
         colorPanel.classList.remove('light');
         colorPanel.classList.add(colorObject.type);
@@ -127,9 +126,11 @@
     }
 
     function hidePanel() {
-        // remove touchend event listener for mobile safari
+        // remove touchend event listener to cater for mobile safari
         window.removeEventListener('touchend', clickHandler);
+
         var colorPanel = document.getElementById('js-color-panel');
+
         colorPanel.classList.remove('is-shown');
         setTimeout(function () {
             colorPanel.classList.remove('is-visibility-shown');
