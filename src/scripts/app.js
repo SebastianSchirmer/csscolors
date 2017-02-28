@@ -55,10 +55,12 @@
     }
 
     function clickHandler(e) {
+        console.log('click event received, event: ' + e + ', e.target: ' + e.target);
         var clickedElement = e.target;
 
         // color button clicked
         if (clickedElement.tagName.toLowerCase() === 'button') {
+            console.log('clicked element is a button element');
             var chosenColor = clickedElement.innerHTML;
             if (typeof chosenColor === 'string' && chosenColor !== '') {
                 updateAndShowColorPanel(chosenColor);
@@ -67,6 +69,7 @@
 
         // color filter anchor clicked
         if (clickedElement.tagName.toLowerCase() === 'a' && clickedElement.classList.contains('js-filter')) {
+            console.log('clicked element is an anchor element');
             var colorCategory = clickedElement.firstElementChild.innerHTML;
 
             if (colorCategory !== filterValue) {
@@ -86,12 +89,15 @@
             || clickedElement.classList.contains('color-hex-code')
             || clickedElement.classList.contains('color-rgb-code')
             || clickedElement.tagName.toLowerCase() === 'code') {
+            console.log('clicked element is the color-panel div element or one of its children');
             // hide the panel
             hidePanel();
         }
     }
 
     function updateAndShowColorPanel(color) {
+        console.log('updateAndShowColorPanel()');
+
         // add touchend event listener for cater for mobile safari
         window.addEventListener('touchend', clickHandler);
 
@@ -124,22 +130,23 @@
         colorRGBCodeElement.firstElementChild.innerHTML = colorObject.rgb;
 
         // show the panel
-        colorPanel.classList.add('is-visibility-shown');
-        setTimeout(function () {
+        // colorPanel.classList.add('is-visibility-shown');
+        // window.setTimeout(function () {
             colorPanel.classList.add('is-shown');
-        }, 100);
+        // }, 0);
     }
 
     function hidePanel() {
+        console.log('hidePanel()');
         // remove touchend event listener to cater for mobile safari
         window.removeEventListener('touchend', clickHandler);
 
         var colorPanel = document.getElementById('js-color-panel');
 
         colorPanel.classList.remove('is-shown');
-        setTimeout(function () {
-            colorPanel.classList.remove('is-visibility-shown');
-        }, 300);
+        // window.setTimeout(function () {
+        //     colorPanel.classList.remove('is-visibility-shown');
+        // }, 300);
     }
 
     // all those lovely colors
