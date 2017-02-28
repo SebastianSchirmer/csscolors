@@ -5,10 +5,10 @@
     "main": "gulpfile.js",
     "author": "Sebastian Schirmer",
     "license": "MIT",
-    "homepage": "https://leschirmeur.github.io/csscolors",
+    "homepage": "https://SebastianSchirmer.github.io/csscolors",
     "repository": {
         "type": "git",
-        "url": "https://github.com/leschirmeur/csscolors.git"
+        "url": "https://github.com/SebastianSchirmer/csscolors.git"
     },
     "devDependencies": {
         "autoprefixer": "~6.7.2",
