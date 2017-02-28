@@ -9,6 +9,7 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var ghPages = require('gulp-gh-pages');
+var fs = require('fs');
 
 /**
  * PostCSS Plugins
@@ -99,6 +100,14 @@ gulp.task('html', function () {
 });
 
 // -----------------------------------------------------------
+// Process favicon files
+// -----------------------------------------------------------
+gulp.task('favicon', function () {
+    gulp.src(['./src/*.png', './src/*.xml', './src/*.json', './src/*.svg', './src/*.ico'])
+        .pipe(gulp.dest('dist/'));
+});
+
+// -----------------------------------------------------------
 // Start browser-sync
 // -----------------------------------------------------------
 gulp.task('browser-sync', ['styles', 'scripts'], function () {
@@ -133,6 +142,7 @@ gulp.task('default', function (done) {
         'clean',
         ['styles', 'scripts', 'images'],
         'html',
+        'favicon',
         'browser-sync',
         'watch',
         done);
@@ -146,6 +156,7 @@ gulp.task('build', function (done) {
         'clean',
         ['styles', 'scripts', 'images'],
         'html',
+        'favicon',
         done);
 });
 
@@ -193,3 +204,111 @@ function errorHandler(error) {
         log(error.toString);
     }
 }
+
+
+/**************************************************/
+/**************************************************/
+// FAVICON
+/**************************************************/
+/**************************************************/
+
+// Generate the icons. This task takes a few seconds to complete.
+// You should run it at least once to create the icons. Then,
+// you should run it whenever RealFaviconGenerator updates its
+// package (see the check-for-favicon-update task below).
+gulp.task('generate-favicon', function(done) {
+    // File where the favicon markups are stored
+    var FAVICON_DATA_FILE = 'src/favicon/faviconData.json';
+
+    $.realFavicon.generateFavicon({
+        masterPicture: 'src/favicon/favicon.png',
+        dest: 'src/',
+        iconsPath: '/',
+        design: {
+            ios: {
+                pictureAspect: 'backgroundAndMargin',
+                backgroundColor: '#ffffff',
+                margin: '0%',
+                assets: {
+                    ios6AndPriorIcons: false,
+                    ios7AndLaterIcons: true,
+                    precomposedIcons: true,
+                    declareOnlyDefaultIcon: true
+                },
+                appName: 'CSS Colors'
+            },
+          desktopBrowser: {},
+          windows: {
+              pictureAspect: 'noChange',
+              backgroundColor: '#ffffff',
+              onConflict: 'override',
+              assets: {
+                  windows80Ie10Tile: true,
+                  windows10Ie11EdgeTiles: {
+                      small: false,
+                      medium: true,
+                      big: false,
+                      rectangle: false
+                  }
+              },
+              appName: 'CSS Colors'
+          },
+          androidChrome: {
+              pictureAspect: 'noChange',
+              themeColor: '#ffffff',
+              manifest: {
+                  name: 'CSS Colors',
+                  display: 'standalone',
+                  orientation: 'notSet',
+                  onConflict: 'override',
+                  declared: true
+              },
+              assets: {
+                  legacyIcon: true,
+                  lowResolutionIcons: false
+              }
+          },
+          safariPinnedTab: {
+              pictureAspect: 'blackAndWhite',
+              threshold: '54.6875',
+              themeColor: '#ffffff'
+          }
+        },
+        settings: {
+          compression: 5,
+          scalingAlgorithm: 'Mitchell',
+          errorOnImageTooSmall: false
+        },
+        markupFile: FAVICON_DATA_FILE
+        }, function() {
+        done();
+    });
+});
+
+// Inject the favicon markups in your HTML pages. You should run
+// this task whenever you modify a page. You can keep this task
+// as is or refactor your existing HTML pipeline.
+gulp.task('inject-favicon-markups', function() {
+    // File where the favicon markups are stored
+    var FAVICON_DATA_FILE = 'src/favicon/faviconData.json';
+
+    return gulp.src(['src/index.html'])
+        .pipe($.realFavicon.injectFaviconMarkups(JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).favicon.html_code))
+        .pipe(gulp.dest('src'));
+});
+
+// Check for updates on RealFaviconGenerator (think: Apple has just
+// released a new Touch icon along with the latest version of iOS).
+// Run this task from time to time. Ideally, make it part of your
+// continuous integration system.
+gulp.task('check-for-favicon-update', function(done) {
+    // File where the favicon markups are stored
+    var FAVICON_DATA_FILE = 'tenants/' + tenantKey + '/favicon/faviconData.json';
+
+    var currentVersion = JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).version;
+    $.realFavicon.checkForUpdates(currentVersion, function(err) {
+        if (err) {
+            throw err;
+        }
+    });
+});
